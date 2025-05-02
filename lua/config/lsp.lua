@@ -16,14 +16,15 @@ return {
                 -- LSP specific settings
             }
         })
+
     end,
+
     opts = {
         servers = {
-            -- ruff 
+            -- ruff
             ruff = {
                 cmd = {"ruff", "server"},
                 filetypes = {"python"},
-                -- 这样配置就能同时支持两种项目结构
                 root_dir = require("lspconfig").util.root_pattern(".git", "pyproject.toml", "setup.py"),
                 -- 其余配置保持不变
                 init_options = { -- 添加 init_options 配置
@@ -45,7 +46,7 @@ return {
                 cmd = {"pyright-langserver", "--stdio"},
                 filetypes = {"python"},
                 root_dir = require("lspconfig").util.root_pattern(".git", "pyproject.toml", "setup.py",
-                    "requirements.txt"),
+                                                                  "requirements.txt"),
                 settings = {
                     python = {
                         analysis = {
@@ -120,14 +121,74 @@ return {
                     }
                 }
             },
+            -- toml
             taplo = {
-                cmd = { "taplo", "lsp", "stdio" },
-                filetypes = { "toml" },
+                cmd = {"taplo", "lsp", "stdio"},
+                filetypes = {"toml"},
                 root_dir = require("lspconfig").util.root_pattern(".git", "."),
                 settings = {
                     -- 这里可以添加 taplo 的自定义设置
                 }
             },
+            -- yml yaml
+            yaml_ls = {
+                cmd = {"yaml-language-server", "--stdio"},
+                filetypes = {"yaml", "yml"},
+                root_dir = require("lspconfig").util.root_pattern(".git", "."),
+                settings = {
+                    yaml = {
+                        keyOrdering = false, -- 允许任意顺序的key
+                        format = {
+                            enable = true
+                        },
+                        validate = true,
+                        hover = true,
+                        completion = true,
+                        schemas = {
+                            -- 你可以在这里添加常用schema映射
+                            ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*"
+                        }
+                    }
+                }
+            },
+            -- clang
+            clangd = {
+                cmd = {"clangd", "--background-index", "--clang-tidy"},
+                filetypes = {"c", "cpp", "objc", "objcpp", "cuda"},
+                root_dir = require("lspconfig").util.root_pattern("compile_commands.json", "compile_flags.txt", ".git",
+                                                                  ".clangd"),
+                settings = {
+                    clangd = {
+                        -- 你可以在这里添加 clangd 的自定义设置
+                        fallbackFlags = {"-std=c++17"},
+                        enableSnippets = true
+                    }
+                }
+            },
+            -- shell / bash
+            bashls = {
+                cmd = {"bash-language-server", "start"},
+                filetypes = {"sh", "bash", "zsh"},
+                root_dir = require("lspconfig").util.root_pattern(".git", "."),
+                settings = {
+                    bashIde = {
+                        backgroundAnalysisMaxFiles = 500,
+                        enableSourceErrorDiagnostics = false,
+                        globPattern = "**/*@(.sh|.inc|.bash|.command)",
+                        includeAllWorkspaceSymbols = false,
+                        logLevel = "info",
+                        shellcheckPath = "shellcheck",
+                        shellcheckArguments = "",
+                        explainshellEndpoint = "",
+                        shfmt = {
+                            path = "shfmt",
+                            ignoreEditorconfig = false,
+                            simplifyCode = false,
+                            languageDialect = "auto"
+                        }
+                    }
+                }
+            }
 
         }
     }
