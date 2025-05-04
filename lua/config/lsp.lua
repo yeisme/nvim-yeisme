@@ -11,7 +11,7 @@ return {
             -- git clone https://github.com/Tencent/LuaHelper.git and build it
             cmd = {"luahelper-lsp", "-mode", "0"},
             filetypes = {"customtype"},
-            root_dir = lspconfig.util.root_pattern(".git", "stylua.toml"),
+            root_dir = lspconfig.util.root_pattern("stylua.toml", "."),
             settings = {
                 -- LSP specific settings
             }
@@ -25,7 +25,7 @@ return {
             ruff = {
                 cmd = {"ruff", "server"},
                 filetypes = {"python"},
-                root_dir = require("lspconfig").util.root_pattern(".git", "pyproject.toml", "setup.py"),
+                root_dir = require("lspconfig").util.root_pattern("pyproject.toml", "setup.py"),
                 -- 其余配置保持不变
                 init_options = { -- 添加 init_options 配置
                     settings = {
@@ -45,8 +45,7 @@ return {
             pyright = {
                 cmd = {"pyright-langserver", "--stdio"},
                 filetypes = {"python"},
-                root_dir = require("lspconfig").util.root_pattern(".git", "pyproject.toml", "setup.py",
-                                                                  "requirements.txt"),
+                root_dir = require("lspconfig").util.root_pattern("pyproject.toml", "setup.py", "requirements.txt"),
                 settings = {
                     python = {
                         analysis = {
@@ -62,7 +61,7 @@ return {
             gopls = {
                 cmd = {"gopls"},
                 filetypes = {"go", "gomod", "gowork", "gotmpl"},
-                root_dir = require("lspconfig").util.root_pattern("go.work", "go.mod", ".git"),
+                root_dir = require("lspconfig").util.root_pattern("go.work", "go.mod"),
                 settings = {
                     gopls = {
                         analyses = {
@@ -93,7 +92,7 @@ return {
             neocmake = {
                 cmd = {"neocmakelsp", "--stdio"},
                 filetypes = {"cmake"},
-                root_dir = require("lspconfig").util.root_pattern("CMakeLists.txt", "cmake", ".git"),
+                root_dir = require("lspconfig").util.root_pattern("CMakeLists.txt", "cmake"),
                 init_options = {
                     buildDirectory = "build"
                 },
@@ -125,7 +124,7 @@ return {
             taplo = {
                 cmd = {"taplo", "lsp", "stdio"},
                 filetypes = {"toml"},
-                root_dir = require("lspconfig").util.root_pattern(".git", "."),
+                root_dir = require("lspconfig").util.root_pattern("."),
                 settings = {
                     -- 这里可以添加 taplo 的自定义设置
                 }
@@ -155,7 +154,7 @@ return {
             clangd = {
                 cmd = {"clangd", "--background-index", "--clang-tidy"},
                 filetypes = {"c", "cpp", "objc", "objcpp", "cuda"},
-                root_dir = require("lspconfig").util.root_pattern("compile_commands.json", "compile_flags.txt", ".git",
+                root_dir = require("lspconfig").util.root_pattern("compile_commands.json", "compile_flags.txt",
                                                                   ".clangd"),
                 settings = {
                     clangd = {
@@ -169,7 +168,7 @@ return {
             bashls = {
                 cmd = {"bash-language-server", "start"},
                 filetypes = {"sh", "bash", "zsh"},
-                root_dir = require("lspconfig").util.root_pattern(".git", "."),
+                root_dir = require("lspconfig").util.root_pattern("."),
                 settings = {
                     bashIde = {
                         backgroundAnalysisMaxFiles = 500,
@@ -188,7 +187,77 @@ return {
                         }
                     }
                 }
-            }
+            },
+            -- typescript or javascript
+            biome = {
+                cmd = {"biome", "lsp-proxy"},
+                filetypes = {'astro', 'css', 'graphql', 'javascript', 'javascriptreact', 'json', 'jsonc', 'svelte',
+                             'typescript', 'typescript.tsx', 'typescriptreact', 'vue'},
+                root_dir = require("lspconfig").util.root_pattern("biome.json", "biome.jsonc"),
+                settings = {
+                    biome = {
+                        -- 你可以在这里添加 biome 的自定义设置
+                        format = {
+                            enable = true
+                        },
+                        lint = {
+                            enable = true
+                        }
+                    }
+                }
+            },
+            tsserver = {
+                cmd = {"typescript-language-server", "--stdio"},
+                filetypes = {"typescript", "javascript", "javascriptreact", "typescriptreact"},
+                root_dir = require("lspconfig").util.root_pattern("tsconfig.json", "jsconfig.json"),
+                settings = {
+                    typescript = {
+                        format = {
+                            enable = true
+                        },
+                        suggest = {
+                            autoImports = true
+                        }
+                    },
+                    javascript = {
+                        format = {
+                            enable = true
+                        },
+                        suggest = {
+                            autoImports = true
+                        }
+                    }
+                }
+            },
+            eslint = {
+                cmd = {"vscode-eslint-language-server", "--stdio"},
+                filetypes = {"javascript", "javascriptreact", "typescript", "typescriptreact"},
+                root_dir = require("lspconfig").util.root_pattern(".eslintrc", ".eslintrc.js", ".eslintrc.json",
+                                                                  "package.json"),
+                settings = {}
+            },
+            -- rust
+            rust_analyzer = {
+                cmd = {"rust-analyzer"},
+                filetypes = {"rust"},
+                root_dir = require("lspconfig").util.root_pattern("Cargo.toml", "rust-project.json"),
+                settings = {
+                    ["rust-analyzer"] = {
+                        assist = {
+                            importMergeBehavior = "last",
+                            importPrefix = "by_self"
+                        },
+                        cargo = {
+                            loadOutDirsFromCheck = true,
+                            allFeatures = true
+                        },
+                        procMacro = {
+                            enable = true
+                        }
+                    }
+                }
+            },
+            
 
         }
     }
