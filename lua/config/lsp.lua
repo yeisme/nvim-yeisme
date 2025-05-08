@@ -152,7 +152,11 @@ return {
             },
             -- clang
             clangd = {
-                cmd = {"clangd", "--background-index", "--clang-tidy"},
+                cmd = {"clangd", "--background-index", "-j=12", "--clang-tidy",
+                       "--clang-tidy-checks=performance-*,bugprone-*", "--all-scopes-completion",
+                       "--completion-style=detailed", "--header-insertion=iwyu", "--pch-storage=disk",
+                       "--import-insertions", "--enable-config", "--fallback-style=Microsoft",
+                       "--header-insertion-decorators", "--suggest-missing-includes", "--clang-tidy-checks=*"},
                 filetypes = {"c", "cpp", "objc", "objcpp", "cuda"},
                 root_dir = require("lspconfig").util.root_pattern("compile_commands.json", "compile_flags.txt",
                                                                   ".clangd"),
@@ -256,8 +260,7 @@ return {
                         }
                     }
                 }
-            },
-            
+            }
 
         }
     }
