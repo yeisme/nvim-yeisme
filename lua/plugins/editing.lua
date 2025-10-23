@@ -1,5 +1,5 @@
 return {
-  -- Smooth scrolling
+  -- 平滑滚动体验
   {
     "karb94/neoscroll.nvim",
     event = "VeryLazy",
@@ -19,7 +19,7 @@ return {
     end,
   },
 
-  -- Better navigation and text objects
+  -- 更强大的文本对象导航
   {
     "nvim-mini/mini.ai",
     event = "VeryLazy",
@@ -28,21 +28,21 @@ return {
     },
   },
 
-  -- Alignable with mini.align
+  -- 文本对齐助手 mini.align
   {
     "nvim-mini/mini.align",
     event = "VeryLazy",
     opts = {},
   },
 
-  -- Auto-pairs
+  -- 自动补全括号与引号
   {
     "nvim-mini/mini.pairs",
     event = "VeryLazy",
     opts = {},
   },
 
-  -- Split/Join operations
+  -- 在单行与多行结构间切换
   {
     "nvim-mini/mini.splitjoin",
     event = "VeryLazy",
@@ -55,7 +55,7 @@ return {
     },
   },
 
-  -- Better comment handling
+  -- 中文友好的注释管理
   {
     "numToStr/Comment.nvim",
     event = "VeryLazy",
@@ -85,7 +85,7 @@ return {
     },
   },
 
-  -- Better undo/redo with tree visualization
+  -- 树状可视化增强撤销重做
   {
     "mbbill/undotree",
     cmd = "UndotreeToggle",
@@ -100,91 +100,7 @@ return {
     end,
   },
 
-  -- Live search and replace
-  {
-    "nvim-pack/nvim-spectre",
-    event = "VeryLazy",
-    dependencies = "nvim-lua/plenary.nvim",
-    config = function()
-      require("spectre").setup({
-        color_devicons = true,
-        highlight = {
-          ui = "String",
-          search = "DiffChange",
-          replace = "DiffDelete",
-        },
-        mapping = {
-          ["toggle_line"] = {
-            map = "dd",
-            cmd = "<cmd>lua require('spectre').toggle_line()<CR>",
-            desc = "Toggle current item",
-          },
-          ["enter_file"] = {
-            map = "<cr>",
-            cmd = "<cmd>lua require('spectre.actions').enter_file()<CR>",
-            desc = "Go to file",
-          },
-          ["send_to_qf"] = {
-            map = "<leader>sq",
-            cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
-            desc = "Send all items to quickfix",
-          },
-          ["replace_cmd"] = {
-            map = "<leader>sc",
-            cmd = "<cmd>lua require('spectre.actions').replace_cmd()<CR>",
-            desc = "Input replace command",
-          },
-          ["show_option_menu"] = {
-            map = "<leader>so",
-            cmd = "<cmd>lua require('spectre').show_options()<CR>",
-            desc = "Show options",
-          },
-          ["run_current_replace"] = {
-            map = "<leader>rc",
-            cmd = "<cmd>lua require('spectre.actions').run_current_replace()<CR>",
-            desc = "Replace current item",
-          },
-          ["run_replace"] = {
-            map = "<leader>R",
-            cmd = "<cmd>lua require('spectre.actions').run_replace()<CR>",
-            desc = "Replace all",
-          },
-          ["change_view_mode"] = {
-            map = "<leader>sv",
-            cmd = "<cmd>lua require('spectre').change_view()<CR>",
-            desc = "Change result view mode",
-          },
-          ["toggle_live_update"] = {
-            map = "tu",
-            cmd = "<cmd>lua require('spectre').toggle_live_update()<CR>",
-            desc = "Update results on every text change",
-          },
-          ["toggle_ignore_case"] = {
-            map = "ti",
-            cmd = "<cmd>lua require('spectre').toggle_ignore_case()<CR>",
-            desc = "Toggle ignore case",
-          },
-          ["toggle_ignore_hidden"] = {
-            map = "th",
-            cmd = "<cmd>lua require('spectre').toggle_hidden()<CR>",
-            desc = "Toggle search hidden files",
-          },
-          ["resume_last_search"] = {
-            map = "<leader>l",
-            cmd = "<cmd>lua require('spectre').resume_last_search()<CR>",
-            desc = "Resume last search",
-          },
-          ["select_all"] = {
-            map = "<leader>sa",
-            cmd = "<cmd>lua require('spectre.actions').select_all()<CR>",
-            desc = "Select all items",
-          },
-        },
-      })
-    end,
-  },
-
-  -- Distraction-free writing mode
+  -- 沉浸式写作模式
   {
     "folke/zen-mode.nvim",
     event = "VeryLazy",
@@ -236,7 +152,7 @@ return {
     end,
   },
 
-  -- Twilight for highlighting
+  -- Twilight 负责柔化背景
   {
     "folke/twilight.nvim",
     event = "VeryLazy",
@@ -259,7 +175,7 @@ return {
     },
   },
 
-  -- Improved marks visualization
+  -- 更直观的标记列表
   {
     "kshenoy/vim-signature",
     event = "VeryLazy",
@@ -269,7 +185,7 @@ return {
     end,
   },
 
-  -- Session management
+  -- 会话持久化
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
@@ -282,13 +198,13 @@ return {
     },
   },
 
-  -- Better text objects and movements
+  -- 增强文本对象与移动
   {
     "wellle/targets.vim",
     event = "VeryLazy",
   },
 
-  -- Improved folding
+  -- 更智能的折叠体验
   {
     "kevinhwang91/nvim-ufo",
     event = "VeryLazy",
@@ -307,6 +223,43 @@ return {
 
       vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
       vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
+    end,
+  },
+
+  -- 类似 VSCode 的引用查看窗口 (Shift+F12)
+  {
+    "dnlhc/glance.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("glance").setup({
+        detectors = {
+          treesitter = true,
+          lsp = true,
+        },
+        theme = {
+          enable = true,
+          mode = "auto",
+        },
+        indent = {
+          guides = true,
+          size = 2,
+        },
+        mappings = {
+          list = {},
+          preview = {},
+        },
+        folds = {
+          folded = false,
+        },
+        offset = {
+          rwidth = 0,
+          hwidth = 0,
+        },
+        winbar = {
+          enable = true,
+        },
+      })
+
     end,
   },
 }

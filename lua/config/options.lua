@@ -2,7 +2,13 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
-vim.o.guifont = "BitstromWera Nerd Font:h13"
+-- 加载 Neovide 配置
+require("config.neovide")
+require("config.neovide_background")
+require("config.neovide_ui")
+
+-- 字体设置：使用系统已安装的 Consolas（如果要用 Nerd Font，需要先安装，见下方注释）
+vim.o.guifont = "JetBrainsMono Nerd Font:h14"
 vim.o.shell = "pwsh"
 vim.o.shellcmdflag = ""
 
@@ -43,5 +49,3 @@ vim.opt.smartindent = true
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.opt.pumheight = 10
-
-

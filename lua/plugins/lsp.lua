@@ -19,6 +19,25 @@ return {
         },
       },
 
+      -- Python: Ruff (fast linter and formatter)
+      ruff_lsp = {
+        cmd = { "ruff", "server" },
+        filetypes = { "python" },
+        root_dir = require("lspconfig").util.root_pattern("pyproject.toml", "setup.py", "requirements.txt", ".git"),
+        settings = {
+          ruff = {
+            args = {},
+            lint = {
+              args = {},
+              enable = true,
+            },
+            format = {
+              args = {},
+            },
+          },
+        },
+      },
+
       -- Go: Gopls
       gopls = {
         cmd = { "gopls" },
@@ -401,19 +420,10 @@ return {
   config = function(_, opts)
     -- Setup LSP servers
     local lspconfig = require("lspconfig")
-    
-    -- Debug: Print available servers
-    local available_servers = {}
-    for server_name, _ in pairs(lspconfig) do
-      if type(_) == "table" and _.setup then
-        table.insert(available_servers, server_name)
-      end
-    end
-    
+
     for server, config in pairs(opts.servers) do
       -- Skip if server is not available in lspconfig
       if not lspconfig[server] or type(lspconfig[server]) ~= "table" or not lspconfig[server].setup then
-        vim.notify("Warning: LSP server '" .. server .. "' not found in lspconfig. Available: pyright, gopls, lua_ls, etc.", vim.log.levels.WARN)
         goto continue
       end
 
