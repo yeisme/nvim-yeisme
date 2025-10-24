@@ -1,36 +1,80 @@
--- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
---
--- Add any additional autocmds here with `vim.api.nvim_create_autocmd`
---
--- Remove existing autocmds by their group name (prefixed with `lazyvim_`)
--- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+-- ============================================================================
+-- 自动命令配置 - 在特定事件发生时自动执行操作
+-- 改善工作流程和编辑体验
+-- ============================================================================
 
--- Auto-save on focus loss
+-- 创建自定义自动命令组，便于管理和清除
+local autocmd_group = vim.api.nvim_create_augroup("CustomAutocmds", { clear = true })
+
+-- ============================================================================
+-- 文件自动保存优化
+-- ============================================================================
 vim.api.nvim_create_autocmd("FocusLost", {
+  group = autocmd_group,
+  -- 当编辑器窗口失去焦点时（切换到其他窗口）自动保存所有修改的文件
+  -- wa 命令：write all 保存所有修改的缓冲区
+  -- silent 前缀：不显示保存消息
   command = "silent! wa",
-  desc = "Auto-save on focus loss"
+  desc = "自动保存：窗口失焦时保存所有缓冲区"
 })
 
--- Highlight on yank
+-- ============================================================================
+-- 复制高亮反馈
+-- ============================================================================
 vim.api.nvim_create_autocmd("TextYankPost", {
+  group = autocmd_group,
   callback = function()
-    vim.highlight.on_yank()
+    -- 复制文本后高亮显示被复制的区域
+    -- timeout = 200：保持高亮 200ms 后自动消失，避免分散注意力
+    vim.highlight.on_yank({ timeout = 200 })
   end,
-  desc = "Highlight yanked text"
+  desc = "文本复制后高亮显示已复制区域"
 })
 
--- Auto-format on save (if you prefer auto-formatting)
--- Uncomment below to enable
+-- ============================================================================
+-- 自动格式化（可选，默认注释）
+-- ============================================================================
+-- 在保存前执行格式化命令
+-- 取消注释以启用自动格式化功能
 -- vim.api.nvim_create_autocmd("BufWritePre", {
 --   command = "silent! Format",
---   desc = "Format on save"
+--   desc = "保存时自动格式化文件"
 -- })
 
--- Disable auto-comment in new line
+-- ============================================================================
+-- 禁用自动注释
+-- ============================================================================
 vim.api.nvim_create_autocmd("BufEnter", {
+  group = autocmd_group,
   callback = function()
+    -- 移除 formatoptions 中的 "o" 选项
+    -- 作用：当按 o 或 O 创建新行时，不自动添加注释前缀（// 或 # 等）
     vim.opt.formatoptions:remove("o")
   end,
-  desc = "Disable auto-comment"
+  desc = "禁用自动注释：新行不自动添加注释前缀"
+})
+
+-- ============================================================================
+-- 光标位置恢复
+-- ============================================================================
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = autocmd_group,
+  callback = function(event)
+    local buf = event.buf
+    -- 跳过特定文件类型以避免意外行为
+    -- 这些文件类型不适合恢复光标位置
+    if vim.bo[buf].filetype:match("^(fugitive|git|nofile|man)") then
+      return
+    end
+    
+    -- 获取上次离开该文件时的光标位置（标记 "）
+    local last_line = vim.fn.line("'\"")
+    
+    -- 如果光标位置有效（在文件范围内），则恢复光标位置
+    if last_line > 0 and last_line <= vim.fn.line("$") then
+      -- 将光标移到保存的行，第一列（0 表示第一列）
+      vim.api.nvim_win_set_cursor(0, { last_line, 0 })
+    end
+  end,
+  desc = "打开文件时恢复光标位置：回到上次编辑的位置"
 })

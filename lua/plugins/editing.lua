@@ -13,7 +13,7 @@ return {
         easing_function = "cubic",
         pre_hook = nil,
         post_hook = nil,
-        performance_mode = false,
+        performance_mode = true,  -- Enable performance mode for smoother scrolling
         ignored_events = { "WinScrolled", "TermEnter" },
       })
     end,

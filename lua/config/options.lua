@@ -1,51 +1,107 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
+-- ============================================================================
+-- Neovim 配置选项 - 核心编辑器设置
+-- ============================================================================
+-- 这个文件在 Lazy.nvim 启动前加载，用于设置基础选项
 
--- 加载 Neovide 配置
-require("config.neovide")
-require("config.neovide_background")
-require("config.neovide_ui")
+-- 按顺序加载性能和功能优化配置
+require("config.performance")        -- 性能优化：LSP 诊断、补全等
+require("config.neovide")            -- Neovide GUI 配置
+require("config.neovide_background") -- Neovide 背景设置
+require("config.neovide_ui")         -- Neovide UI 增强
+require("config.search")             -- 搜索功能优化
+require("config.buffer_optimization") -- 缓冲区优化
+require("config.ux_enhancements")    -- 用户体验增强
 
--- 字体设置：使用系统已安装的 Consolas（如果要用 Nerd Font，需要先安装，见下方注释）
+-- ============================================================================
+-- 字体和 Shell 配置
+-- ============================================================================
+-- 设置 GUI 字体：使用 JetBrainsMono Nerd Font 14 号
+-- 需要系统已安装此字体，可根据喜好修改为其他字体
 vim.o.guifont = "JetBrainsMono Nerd Font:h14"
+-- 设置 Windows 下的 Shell 为 PowerShell
 vim.o.shell = "pwsh"
+-- PowerShell 命令行标志（留空以使用默认设置）
 vim.o.shellcmdflag = ""
 
--- Better display
+-- ============================================================================
+-- 基础显示设置
+-- ============================================================================
+-- 显示行号
 vim.opt.number = true
+-- 显示相对行号（相对于当前行的距离）
 vim.opt.relativenumber = true
+-- 禁用自动换行：长行不会自动换到下一行
 vim.opt.wrap = false
+-- 在单词处换行（仅当 wrap 启用时有效）
 vim.opt.linebreak = true
+-- 匹配括号时高亮显示
 vim.opt.showmatch = true
+-- 搜索结果高亮
 vim.opt.hlsearch = true
+-- 实时搜索（边输入边显示）
 vim.opt.incsearch = true
+-- 搜索时不区分大小写
 vim.opt.ignorecase = true
+-- 当搜索包含大写字母时自动区分大小写
 vim.opt.smartcase = true
 
--- Performance
-vim.opt.updatetime = 200
+-- ============================================================================
+-- 性能相关基础选项
+-- ============================================================================
+-- LSP 和其他后台任务的更新间隔（毫秒）
+-- 值越小反应越快但 CPU 占用更高
+vim.opt.updatetime = 100
+-- 按键映射的超时时间（毫秒）
 vim.opt.timeoutlen = 300
+-- 插入/可视模式下键盘序列的超时时间
+vim.opt.ttimeoutlen = 50
+-- 限制语法高亮列数为 200，避免对超长行的完整高亮
+vim.opt.synmaxcol = 200
+-- 使用快速的正则表达式引擎
+vim.opt.regexpengine = 1
 
--- Code folding
+-- ============================================================================
+-- 代码折叠配置
+-- ============================================================================
+-- 新打开文件时不自动折叠内容
 vim.opt.foldenable = false
+-- 使用缩进级别计算折叠（相对于缩进深度）
 vim.opt.foldmethod = "indent"
+-- 初始折叠级别为 99（基本不折叠任何内容）
 vim.opt.foldlevel = 99
 
--- Visual tweaks
+-- ============================================================================
+-- 视觉和 UI 增强
+-- ============================================================================
+-- 高亮当前行
 vim.opt.cursorline = true
+-- 在第 120 列显示竖线标尺，便于控制行宽
 vim.opt.colorcolumn = "120"
+-- 始终显示符号列（用于诊断图标和断点）
 vim.opt.signcolumn = "yes"
+-- 自定义状态行格式
 vim.opt.statusline = "%< %f %h%m%r%=%-14.(%l,%c%V%) %P"
 
--- Indentation
+-- ============================================================================
+-- 缩进设置
+-- ============================================================================
+-- 制表符宽度为 4 个空格
 vim.opt.tabstop = 4
+-- 移动操作（>> 和 <<）的缩进宽度
 vim.opt.shiftwidth = 4
+-- 使用空格代替制表符
 vim.opt.expandtab = true
+-- 按退格键时删除 4 个空格（一个制表符宽度）
 vim.opt.softtabstop = 4
+-- 自动缩进：新行继承前一行的缩进
 vim.opt.autoindent = true
+-- 智能缩进：根据语法自动调整缩进
 vim.opt.smartindent = true
 
--- Completion
+-- ============================================================================
+-- 补全菜单配置
+-- ============================================================================
+-- 补全选项：只显示菜单，不自动选择第一项
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
+-- 补全菜单最多显示 10 行
 vim.opt.pumheight = 10

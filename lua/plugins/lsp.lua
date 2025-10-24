@@ -1,6 +1,15 @@
 return {
   "neovim/nvim-lspconfig",
   opts = {
+    -- LSP performance optimization
+    diagnostics = {
+      underline = true,
+      virtual_text = { prefix = "●" },  -- Show as inline virtual text with icon
+      float = { border = "rounded" },
+      severity_sort = true,
+      -- Only update diagnostics after 500ms of inactivity
+      update_in_insert = false,
+    },
     servers = {
       -- Python: Pyright (type checking and analysis)
       pyright = {
